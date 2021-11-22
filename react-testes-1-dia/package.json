@@ -1,0 +1,9 @@
+{
+  "name": "react-testes-1-dia",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "test": "jest"
+  }
+}
