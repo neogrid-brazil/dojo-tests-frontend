@@ -26,7 +26,7 @@ const Person: React.FC = () => {
   useEffect(() => {
     setLoading(true)
     fetchPersons().finally(() => setLoading(false))
-  }, [findAllPersons, setPersons, fetchPersons])
+  }, [findAllPersons, setPersons, fetchPersons, setLoading])
 
   return (
     <>
