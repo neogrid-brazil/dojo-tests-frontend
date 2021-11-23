@@ -1,15 +1,17 @@
-import React, { useEffect } from 'react'
+import React, { Dispatch, SetStateAction, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 
 import { PersonType } from 'interfaces/Person'
 
 interface PersonFormProps {
   loading: boolean
+  setLoading: Dispatch<SetStateAction<boolean>>
   createPerson(name: string): Promise<PersonType>
   fetchPersons(): void
 }
 
 const PersonForm: React.FC<PersonFormProps> = ({
+  setLoading,
   createPerson,
   fetchPersons,
   loading,
@@ -27,10 +29,12 @@ const PersonForm: React.FC<PersonFormProps> = ({
   }, [setFocus])
 
   const onSubmit = async ({ name }: PersonType) => {
+    setLoading(true)
     await createPerson(name)
     await fetchPersons()
     setFocus('name')
     setValue('name', '')
+    setLoading(false)
   }
 
   return (

@@ -1,38 +1,45 @@
 import React, { useCallback, useEffect } from 'react'
 
 import { usePerson } from 'hooks/usePerson'
-
 import PersonList from './PersonList'
 import PersonForm from './PersonForm'
+import { PersonType } from 'interfaces/Person'
 
 const Person: React.FC = () => {
   const {
+    loading,
     persons,
+    setLoading,
     setPersons,
     findAllPersons,
     createPerson,
     deletePerson,
-    loading,
   } = usePerson()
 
   const fetchPersons = useCallback(() => {
-    findAllPersons().then(setPersons)
+    return findAllPersons()
+      .then((persons: PersonType[]) => {
+        setPersons(persons)
+      })
   }, [findAllPersons, setPersons])
 
   useEffect(() => {
-    fetchPersons()
+    setLoading(true)
+    fetchPersons().finally(() => setLoading(false))
   }, [findAllPersons, setPersons, fetchPersons])
 
   return (
     <>
       <PersonForm
         loading={loading}
+        setLoading={setLoading}
         createPerson={createPerson}
         fetchPersons={fetchPersons}
       />
       <PersonList
         persons={persons}
         loading={loading}
+        setLoading={setLoading}
         fetchPersons={fetchPersons}
         deletePerson={deletePerson}
       />
