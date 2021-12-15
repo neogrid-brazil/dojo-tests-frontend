@@ -1,31 +1,43 @@
-import { render, screen } from '@testing-library/react'
+import { render, waitFor } from '@testing-library/react'
 
 import Person from './Person'
-
-import { usePerson } from "../hooks/usePerson";
-
+import { usePersonMock } from './__mock__';
 jest.mock("hooks/usePerson")
 
-const usePersonMock = (props: any) => {
-  const callback = {
-    loading: false,
-    persons: [],
-    setLoading: jest.fn(),
-    setPersons: jest.fn(),
-    findAllPersons: jest.fn().mockResolvedValue(() => {}),
-    createPerson: jest.fn(),
-    deletePerson: jest.fn(),
-  };
-  (usePerson as jest.Mock).mockReturnValue({...callback, ...props})
-}
+const mockFindAllPersonsWithDelay = () => jest.fn().mockImplementation(() => {
+  return new Promise((res, _) => {
+    setTimeout(() => res([]), 1)
+  })
+});
+
 
 describe('Person', () => {
-  it('deve iniciar o componente com ...', () => {
-    usePersonMock({
-      findAllPersons: jest.fn().mockResolvedValue(() => {}),
+  it('deve chamar findAllPersons quando componente iniciou.', () => {
+    const mock = usePersonMock({
+      findAllPersons: jest.fn().mockResolvedValue(() => []),
+    });
+    render(<Person />)
+    expect(mock.findAllPersons).toBeCalled();
+  })
+
+  it('deve ter chamado setLoading quando componente iniciou com true.', async () => {
+    jest.useFakeTimers();
+    const mock = usePersonMock({
+      findAllPersons: mockFindAllPersonsWithDelay()
     })
     render(<Person />)
+    expect(mock.setLoading).toBeCalled()
+    await waitFor(() => expect(mock.setLoading).toHaveBeenCalledWith(true))
+  })
 
-    screen.debug()
+  it('deve ter chamado setLoading após carregamento ter finalizado.', async () => {
+    jest.useFakeTimers();
+    const mock = usePersonMock({
+      findAllPersons: mockFindAllPersonsWithDelay()
+    })
+    render(<Person />)
+    jest.advanceTimersByTime(1)
+    expect(mock.setLoading).toBeCalled()
+    await waitFor(() => expect(mock.setLoading).toHaveBeenCalledWith(false))
   })
 })

@@ -41,7 +41,7 @@ const PersonForm: React.FC<PersonFormProps> = ({
     <>
       <form autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
         <div>
-          <input {...register('name', { required: true })} />
+          <input {...register('name', { required: true })} role={'search'} />
           {errors.name?.type === 'required' && (
             <p style={{ color: 'red' }}>Nome é obrigatório.</p>
           )}
