@@ -2,7 +2,7 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import PersonForm from './PersonForm'
-import { MockReturn, usePersonMock } from './__mock__'
+import { MockReturn, fetchPersons, usePersonMock } from './__mock__'
 
 jest.mock("hooks/usePerson")
 
@@ -14,7 +14,6 @@ const createPerson = jest.fn().mockImplementation(() => {
   })
 })
 
-const fetchPersons = jest.fn().mockResolvedValue({}) as () => void;
 describe('PersonForm', () => {
   it('deve mostrar input', () => {
     render(<PersonForm

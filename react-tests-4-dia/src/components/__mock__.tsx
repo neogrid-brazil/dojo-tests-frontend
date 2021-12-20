@@ -11,6 +11,7 @@ export const MockReturn: ReturnType<typeof usePerson> = {
   deletePerson: jest.fn(),
 };
 
+export const fetchPersons = jest.fn().mockResolvedValue({}) as () => void;
 export const usePersonMock = (props: Partial<ReturnType<typeof usePerson>>): ReturnType<typeof usePerson>=> {const callback = MockReturn;
   const mockHook = {...callback, ...props};
   (usePerson as jest.Mock).mockReturnValue(mockHook)

@@ -45,7 +45,7 @@ const PersonList: React.FC<PersonListProps> = ({
         <tbody>
         {persons &&
         persons.map((person, index) => (
-          <tr key={index}>
+          <tr key={index} data-id={person.id}>
             <td>{person.name}</td>
             <td>
               <button onClick={() => handleDelete(person.id)}>
